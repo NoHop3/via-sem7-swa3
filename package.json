@@ -12,7 +12,7 @@
     "@mui/base": "5.0.0-alpha.118",
     "@mui/icons-material": "5.14.11",
     "@mui/material": "5.14.11",
-    "@mui/styled-engine-sc": "5.14.11",
+    "@mui/styled-engine-sc": "5.14.12",
     "@mui/system": "5.14.11",
     "@mui/types": "7.2.4",
     "@reduxjs/toolkit": "1.9.6",
