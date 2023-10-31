@@ -1,6 +1,6 @@
 // src/pages/home/home.tsx
-import { IHomeProps } from './home.props';
-import { StyledHomeWrapper, StyledHomeTitle } from './home.styles';
+// import { IHomeProps } from './home.props';
+import { StyledHomeWrapper } from './home.styles';
 import { Gameboard } from '../../components';
 
 function* stringGenerator() {
@@ -11,14 +11,11 @@ function* stringGenerator() {
   }
 }
 
-export const _Home = (props: IHomeProps) => {
-  const { title } = props;
-
+export const _Home = () => {
   const generator = stringGenerator(); // Create an instance of the generator
 
   return (
     <StyledHomeWrapper>
-      <StyledHomeTitle>{title}</StyledHomeTitle>
       <Gameboard rows={5} cols={5} generator={generator} />
     </StyledHomeWrapper>
   );

@@ -1,3 +1,1 @@
-export interface IHomeProps {
-  title: string;
-}
+// export interface IHomeProps {}

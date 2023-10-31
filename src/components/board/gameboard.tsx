@@ -1,9 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Create, Position, CanMove, Move, Board } from './functional/board';
-import { StyledBoard } from './gameboard.styles';
+import {
+  GameOverTitle,
+  Overlay,
+  RestartButton,
+  StyledBoard,
+  StyledBoardWrapper,
+  StyledRanking,
+} from './gameboard.styles';
 import { IGameboardProps } from './gameboard.props';
 
-const GameBoard = ({ rows, cols, generator, score, movesLeft, user, setScore, setMovesLeft }: IGameboardProps) => {
+const GameBoard = ({
+  rows,
+  cols,
+  generator,
+  score,
+  movesLeft,
+  user,
+  completedGames,
+  setScore,
+  setMovesLeft,
+  createGame,
+  setCompletedGames,
+}: IGameboardProps) => {
   const [board, setBoard] = useState<Board<string | IteratorResult<string, void>>>();
   const [selectedPiece, setSelectedPiece] = useState<Position | undefined>();
   const [pieceClasses, setPieceClasses] = useState<string[][]>([]);
@@ -20,6 +39,18 @@ const GameBoard = ({ rows, cols, generator, score, movesLeft, user, setScore, se
     }
   }, [generator, rows, cols]);
 
+  useEffect(() => {
+    if (user) {
+      setCompletedGames();
+    }
+  }, [user]);
+
+  function restartGame() {
+    setBoard(Create(generator, rows, cols));
+    setScore(0);
+    setMovesLeft(10);
+  }
+
   const handlePieceClick = (position: Position) => {
     if (selectedPiece) {
       if (position.row === selectedPiece.row && position.col === selectedPiece.col) {
@@ -32,6 +63,17 @@ const GameBoard = ({ rows, cols, generator, score, movesLeft, user, setScore, se
             Move(generator, board, selectedPiece, position);
             setBoard(board);
             setSelectedPiece(undefined);
+            if (user) {
+              setMovesLeft(movesLeft - 1);
+              if (movesLeft - 1 === 0) {
+                createGame({
+                  userId: user?.id,
+                  score,
+                  completed: true,
+                });
+                setCompletedGames();
+              }
+            }
           }
         }
       } else {
@@ -240,20 +282,24 @@ const GameBoard = ({ rows, cols, generator, score, movesLeft, user, setScore, se
   }, [board]);
 
   return (
-    <>
-      {user ? (
-        <>
-          <h3>User: {user.username}</h3>
-          <h3>Moves left: {movesLeft}</h3>
-          <h3>Score: {score}</h3>
-        </>
-      ) : (
-        <>
-          <h3>Please login to track your progress</h3>
-          <h3>Unsaved score: {score}</h3>
-        </>
-      )}
+    <StyledBoardWrapper>
+      {movesLeft === 0 ? (
+        <Overlay>
+          <GameOverTitle>Game Over</GameOverTitle>
+          <RestartButton onClick={restartGame}>Restart</RestartButton>
+        </Overlay>
+      ) : null}
       <StyledBoard>
+        {user ? (
+          <h3>
+            {user.username}, Moves left: {movesLeft}, Score: {score}
+          </h3>
+        ) : (
+          <>
+            <h3>Please login to track your progress</h3>
+            <h3>Unsaved score: {score}</h3>
+          </>
+        )}
         {board?.pieces.map((row, rowIndex) => (
           <div className="board-row" key={rowIndex}>
             {row.map((piece, colIndex) => (
@@ -271,7 +317,23 @@ const GameBoard = ({ rows, cols, generator, score, movesLeft, user, setScore, se
           </div>
         ))}
       </StyledBoard>
-    </>
+      <StyledRanking>
+        {user ? (
+          <>
+            <h3>Last completed games</h3>
+            {completedGames.map((game, index) => (
+              <div key={index}>
+                <span>
+                  Game {game.id}: {game.score}
+                </span>
+              </div>
+            ))}
+          </>
+        ) : (
+          <h3>Please login to see your completed games</h3>
+        )}
+      </StyledRanking>
+    </StyledBoardWrapper>
   );
 };
 

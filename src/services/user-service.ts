@@ -4,6 +4,7 @@ import { AuthenticatedUser, User, setIsLoading, setNotification, setUser, userEn
 // #region login
 export const login = (user: User) => (dispatch: any) => {
   dispatch(setIsLoading(true));
+  console.log(user);
   axios
     .post(
       userEndpoints.login(),
@@ -17,7 +18,6 @@ export const login = (user: User) => (dispatch: any) => {
       },
     )
     .then((res: any) => {
-      console.log(res.data);
       localStorage.setItem('token', res.data.token as string);
       dispatch(setUser({ ...user, admin: false, id: res.data.userId }));
       dispatch(
@@ -48,7 +48,6 @@ export const login = (user: User) => (dispatch: any) => {
 // #region register
 export const register = (user: User) => (dispatch: any) => {
   dispatch(setIsLoading(true));
-  console.log(user);
   axios
     .post(userEndpoints.register(), JSON.stringify(user), {
       headers: {
@@ -56,7 +55,6 @@ export const register = (user: User) => (dispatch: any) => {
       },
     })
     .then((res: any) => {
-      console.log(res.data);
       localStorage.setItem('token', res.data.token as string);
       dispatch(setUser(res.data.user as AuthenticatedUser));
       dispatch(
