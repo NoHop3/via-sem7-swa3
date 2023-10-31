@@ -1,15 +1,25 @@
-import { connect } from 'react-redux';
-import { bindActionCreators } from '@reduxjs/toolkit';
+// src/pages/home/home.tsx
+import { IHomeProps } from './home.props';
+import { StyledHomeWrapper, StyledHomeTitle } from './home.styles';
+import { Gameboard } from '../../components';
 
-import { type ApplicationState, type AppDispatch } from '../../shared';
-import { Home } from './home.container';
+function* stringGenerator() {
+  const characters = ['A', 'B', 'C'];
+  while (true) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    yield characters[randomIndex];
+  }
+}
 
-const mapStateToProps = (state: ApplicationState) => ({
-  title: 'Home',
-});
+export const _Home = (props: IHomeProps) => {
+  const { title } = props;
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
-  return bindActionCreators({}, dispatch);
+  const generator = stringGenerator(); // Create an instance of the generator
+
+  return (
+    <StyledHomeWrapper>
+      <StyledHomeTitle>{title}</StyledHomeTitle>
+      <Gameboard rows={5} cols={5} generator={generator} />
+    </StyledHomeWrapper>
+  );
 };
-
-export const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(Home);

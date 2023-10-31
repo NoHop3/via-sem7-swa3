@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 
 import { RegisterProps } from '../authentication.props';
-import { isEmailValid } from './register.utils';
 import { Copyright } from '../authentication.utils';
 import { Backdrop } from '../../../shared';
 
@@ -43,17 +42,9 @@ export const Register = (props: RegisterProps) => {
 
   const validateForm = () => {
     return (
-      isEmailValid(formState.email) === '' &&
-      formState.email !== '' &&
       formState.username !== '' &&
       formState.username.length >= 3 &&
       formState.username.length <= 21 &&
-      formState.firstName !== '' &&
-      formState.firstName.length >= 3 &&
-      formState.firstName.length <= 21 &&
-      formState.lastName !== '' &&
-      formState.lastName.length >= 3 &&
-      formState.lastName.length <= 21 &&
       formState.password !== '' &&
       formState.password.length >= 5 &&
       formState.password.length <= 21
@@ -103,64 +94,6 @@ export const Register = (props: RegisterProps) => {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  onChange={handleChange}
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  error={
-                    formState.firstName !== ''
-                      ? formState.firstName.length < 3 || formState.firstName.length > 20
-                      : false
-                  }
-                  helperText={
-                    formState.firstName !== ''
-                      ? formState.firstName.length < 3 || formState.firstName.length > 20
-                        ? 'Must be between 3 and 20 characters'
-                        : ''
-                      : ''
-                  }
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  error={
-                    formState.lastName !== '' ? formState.lastName.length < 3 || formState.lastName.length > 20 : false
-                  }
-                  helperText={
-                    formState.lastName !== ''
-                      ? formState.lastName.length < 3 || formState.lastName.length > 20
-                        ? 'Must be between 3 and 20 characters'
-                        : ''
-                      : ''
-                  }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  error={formState.email !== '' && isEmailValid(formState.email) !== ''}
-                  helperText={isEmailValid(formState.email)}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   onChange={handleChange}

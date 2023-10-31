@@ -62,7 +62,7 @@ export const Login = (props: LoginProps) => {
     console.log('handleSubmit');
     event.preventDefault();
     if (validateForm()) {
-      props.login(formState.username, formState.password);
+      props.login(formState);
     }
   };
 

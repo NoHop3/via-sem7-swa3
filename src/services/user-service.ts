@@ -1,16 +1,14 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 import { AuthenticatedUser, User, setIsLoading, setNotification, setUser, userEndpoints } from '../shared';
 
 // #region login
-export const login = (username: string, password: string) => (dispatch: any) => {
+export const login = (user: User) => (dispatch: any) => {
   dispatch(setIsLoading(true));
   axios
     .post(
       userEndpoints.login(),
       JSON.stringify({
-        username,
-        password,
+        user,
       }),
       {
         headers: {
@@ -21,7 +19,7 @@ export const login = (username: string, password: string) => (dispatch: any) => 
     .then((res: any) => {
       console.log(res.data);
       localStorage.setItem('token', res.data.token as string);
-      dispatch(setUser(jwtDecode(res.data.token as string) as AuthenticatedUser));
+      dispatch(setUser({ ...user, admin: false, id: res.data.userId }));
       dispatch(
         setNotification({
           open: true,
@@ -58,8 +56,9 @@ export const register = (user: User) => (dispatch: any) => {
       },
     })
     .then((res: any) => {
+      console.log(res.data);
       localStorage.setItem('token', res.data.token as string);
-      dispatch(setUser(jwtDecode(res.data.token as string) as AuthenticatedUser));
+      dispatch(setUser(res.data.user as AuthenticatedUser));
       dispatch(
         setNotification({
           open: true,

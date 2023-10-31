@@ -6,7 +6,7 @@ export interface AuthenticationProps {
 }
 
 export interface LoginProps extends AuthenticationProps {
-  login: (username: string, password: string) => void;
+  login: (user: User) => void;
 }
 
 export interface RegisterProps extends AuthenticationProps {
